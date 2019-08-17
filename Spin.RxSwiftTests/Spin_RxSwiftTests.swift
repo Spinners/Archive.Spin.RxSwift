@@ -8,6 +8,8 @@
 
 import XCTest
 @testable import Spin_RxSwift
+import Spin
+import RxSwift
 
 class Spin_RxSwiftTests: XCTestCase {
 

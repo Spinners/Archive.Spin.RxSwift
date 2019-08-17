@@ -10,6 +10,11 @@
 		74243EE72307B013001A05B3 /* Spin_RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74243EDD2307B013001A05B3 /* Spin_RxSwift.framework */; };
 		74243EEC2307B013001A05B3 /* Spin_RxSwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74243EEB2307B013001A05B3 /* Spin_RxSwiftTests.swift */; };
 		74243EEE2307B013001A05B3 /* Spin_RxSwift.h in Headers */ = {isa = PBXBuildFile; fileRef = 74243EE02307B013001A05B3 /* Spin_RxSwift.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		74243EFA2307B0DE001A05B3 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74243EF82307B0DE001A05B3 /* RxSwift.framework */; };
+		74243EFB2307B0DE001A05B3 /* Spin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74243EF92307B0DE001A05B3 /* Spin.framework */; };
+		74243EFC2307B0F2001A05B3 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74243EF82307B0DE001A05B3 /* RxSwift.framework */; };
+		74243EFD2307B0F2001A05B3 /* Spin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74243EF92307B0DE001A05B3 /* Spin.framework */; };
+		74243EFF2307B166001A05B3 /* Observable+Stream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74243EFE2307B166001A05B3 /* Observable+Stream.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,6 +34,9 @@
 		74243EE62307B013001A05B3 /* Spin.RxSwiftTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Spin.RxSwiftTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		74243EEB2307B013001A05B3 /* Spin_RxSwiftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spin_RxSwiftTests.swift; sourceTree = "<group>"; };
 		74243EED2307B013001A05B3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		74243EF82307B0DE001A05B3 /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = Carthage/Build/iOS/RxSwift.framework; sourceTree = "<group>"; };
+		74243EF92307B0DE001A05B3 /* Spin.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Spin.framework; path = Carthage/Build/iOS/Spin.framework; sourceTree = "<group>"; };
+		74243EFE2307B166001A05B3 /* Observable+Stream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Observable+Stream.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -36,6 +44,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				74243EFA2307B0DE001A05B3 /* RxSwift.framework in Frameworks */,
+				74243EFB2307B0DE001A05B3 /* Spin.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -43,6 +53,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				74243EFC2307B0F2001A05B3 /* RxSwift.framework in Frameworks */,
+				74243EFD2307B0F2001A05B3 /* Spin.framework in Frameworks */,
 				74243EE72307B013001A05B3 /* Spin_RxSwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -56,6 +68,7 @@
 				74243EDF2307B013001A05B3 /* Spin.RxSwift */,
 				74243EEA2307B013001A05B3 /* Spin.RxSwiftTests */,
 				74243EDE2307B013001A05B3 /* Products */,
+				74243EF72307B0DD001A05B3 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -73,6 +86,7 @@
 			children = (
 				74243EE02307B013001A05B3 /* Spin_RxSwift.h */,
 				74243EE12307B013001A05B3 /* Info.plist */,
+				74243EFE2307B166001A05B3 /* Observable+Stream.swift */,
 			);
 			path = Spin.RxSwift;
 			sourceTree = "<group>";
@@ -84,6 +98,15 @@
 				74243EED2307B013001A05B3 /* Info.plist */,
 			);
 			path = Spin.RxSwiftTests;
+			sourceTree = "<group>";
+		};
+		74243EF72307B0DD001A05B3 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				74243EF82307B0DE001A05B3 /* RxSwift.framework */,
+				74243EF92307B0DE001A05B3 /* Spin.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -148,6 +171,7 @@
 				TargetAttributes = {
 					74243EDC2307B013001A05B3 = {
 						CreatedOnToolsVersion = 10.2.1;
+						LastSwiftMigration = 1020;
 					};
 					74243EE52307B013001A05B3 = {
 						CreatedOnToolsVersion = 10.2.1;
@@ -194,6 +218,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				74243EFF2307B166001A05B3 /* Observable+Stream.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -268,7 +293,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -326,7 +351,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -341,6 +366,7 @@
 		74243EF22307B013001A05B3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -348,16 +374,22 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = Spin.RxSwift/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "io.warpfactor.Spin-RxSwift";
+				PRODUCT_BUNDLE_IDENTIFIER = io.warpfactor.Spin.RxSwift;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -366,6 +398,7 @@
 		74243EF32307B013001A05B3 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -373,14 +406,19 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = Spin.RxSwift/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "io.warpfactor.Spin-RxSwift";
+				PRODUCT_BUNDLE_IDENTIFIER = io.warpfactor.Spin.RxSwift;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
@@ -391,15 +429,20 @@
 		74243EF52307B013001A05B3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 3V5265LQM9;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = Spin.RxSwiftTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "io.warpfactor.Spin-RxSwiftTests";
+				PRODUCT_BUNDLE_IDENTIFIER = io.warpfactor.Spin.RxSwiftTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -409,15 +452,20 @@
 		74243EF62307B013001A05B3 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 3V5265LQM9;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = Spin.RxSwiftTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "io.warpfactor.Spin-RxSwiftTests";
+				PRODUCT_BUNDLE_IDENTIFIER = io.warpfactor.Spin.RxSwiftTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

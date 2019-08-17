@@ -5,6 +5,11 @@
 ## Build generated
 build/
 DerivedData/
+Spin.RxSwift.framework.zip
+undocumented.json
+
+## macos
+.DS_Store
 
 ## Various settings
 *.pbxuser
@@ -52,7 +57,8 @@ playground.xcworkspace
 #
 # Add this line if you want to avoid checking in source code from Carthage dependencies.
 # Carthage/Checkouts
-
+Carthage
+Carthage/Checkouts
 Carthage/Build
 
 # fastlane
