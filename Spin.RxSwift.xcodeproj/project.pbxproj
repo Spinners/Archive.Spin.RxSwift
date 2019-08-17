@@ -14,7 +14,7 @@
 		74243EFB2307B0DE001A05B3 /* Spin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74243EF92307B0DE001A05B3 /* Spin.framework */; };
 		74243EFC2307B0F2001A05B3 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74243EF82307B0DE001A05B3 /* RxSwift.framework */; };
 		74243EFD2307B0F2001A05B3 /* Spin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74243EF92307B0DE001A05B3 /* Spin.framework */; };
-		74243EFF2307B166001A05B3 /* Observable+Stream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74243EFE2307B166001A05B3 /* Observable+Stream.swift */; };
+		74243EFF2307B166001A05B3 /* Observable+Spin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74243EFE2307B166001A05B3 /* Observable+Spin.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,7 +36,7 @@
 		74243EED2307B013001A05B3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		74243EF82307B0DE001A05B3 /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = Carthage/Build/iOS/RxSwift.framework; sourceTree = "<group>"; };
 		74243EF92307B0DE001A05B3 /* Spin.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Spin.framework; path = Carthage/Build/iOS/Spin.framework; sourceTree = "<group>"; };
-		74243EFE2307B166001A05B3 /* Observable+Stream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Observable+Stream.swift"; sourceTree = "<group>"; };
+		74243EFE2307B166001A05B3 /* Observable+Spin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Observable+Spin.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,7 +86,7 @@
 			children = (
 				74243EE02307B013001A05B3 /* Spin_RxSwift.h */,
 				74243EE12307B013001A05B3 /* Info.plist */,
-				74243EFE2307B166001A05B3 /* Observable+Stream.swift */,
+				74243EFE2307B166001A05B3 /* Observable+Spin.swift */,
 			);
 			path = Spin.RxSwift;
 			sourceTree = "<group>";
@@ -218,7 +218,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				74243EFF2307B166001A05B3 /* Observable+Stream.swift in Sources */,
+				74243EFF2307B166001A05B3 /* Observable+Spin.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

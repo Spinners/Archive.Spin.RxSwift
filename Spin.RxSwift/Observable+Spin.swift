@@ -9,7 +9,7 @@
 import RxSwift
 import Spin
 
-extension Observable: Spin.Stream {
+extension Observable: Producer & Consumable {
     public typealias Input = Observable
     public typealias Value = Element
     public typealias Context = SchedulerType
