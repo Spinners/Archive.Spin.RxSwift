@@ -7,13 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1AC3BB4C230B82620019880E /* RxSwift.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 74243EF82307B0DE001A05B3 /* RxSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		1AC3BB4D230B82620019880E /* Spin.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 74243EF92307B0DE001A05B3 /* Spin.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		74243EE72307B013001A05B3 /* Spin_RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74243EDD2307B013001A05B3 /* Spin_RxSwift.framework */; };
 		74243EEC2307B013001A05B3 /* Spin_RxSwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74243EEB2307B013001A05B3 /* Spin_RxSwiftTests.swift */; };
 		74243EEE2307B013001A05B3 /* Spin_RxSwift.h in Headers */ = {isa = PBXBuildFile; fileRef = 74243EE02307B013001A05B3 /* Spin_RxSwift.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		74243EFA2307B0DE001A05B3 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74243EF82307B0DE001A05B3 /* RxSwift.framework */; };
 		74243EFB2307B0DE001A05B3 /* Spin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74243EF92307B0DE001A05B3 /* Spin.framework */; };
-		74243EFC2307B0F2001A05B3 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74243EF82307B0DE001A05B3 /* RxSwift.framework */; };
-		74243EFD2307B0F2001A05B3 /* Spin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74243EF92307B0DE001A05B3 /* Spin.framework */; };
 		74243EFF2307B166001A05B3 /* Observable+Spin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74243EFE2307B166001A05B3 /* Observable+Spin.swift */; };
 /* End PBXBuildFile section */
 
@@ -26,6 +26,20 @@
 			remoteInfo = Spin.RxSwift;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		1AC3BB4B230B82570019880E /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				1AC3BB4C230B82620019880E /* RxSwift.framework in CopyFiles */,
+				1AC3BB4D230B82620019880E /* Spin.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		74243EDD2307B013001A05B3 /* Spin_RxSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Spin_RxSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -53,8 +67,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				74243EFC2307B0F2001A05B3 /* RxSwift.framework in Frameworks */,
-				74243EFD2307B0F2001A05B3 /* Spin.framework in Frameworks */,
 				74243EE72307B013001A05B3 /* Spin_RxSwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -148,6 +160,7 @@
 				74243EE22307B013001A05B3 /* Sources */,
 				74243EE32307B013001A05B3 /* Frameworks */,
 				74243EE42307B013001A05B3 /* Resources */,
+				1AC3BB4B230B82570019880E /* CopyFiles */,
 			);
 			buildRules = (
 			);
