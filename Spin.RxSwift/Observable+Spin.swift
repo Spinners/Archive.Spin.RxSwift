@@ -26,6 +26,10 @@ extension Observable: Producer & Consumable {
     public func scan<Result>(initial value: Result, reducer: @escaping (Result, Value) -> Result) -> AnyConsumable<Result, Context, Runtime> {
         return self.scan(value, accumulator: reducer).eraseToAnyConsumable()
     }
+    
+    public func toStream() -> Input {
+        return self
+    }
 
     public func consume(by: @escaping (Value) -> Void, on: Context) -> AnyConsumable<Value, Context, Runtime> {
         return self.observeOn(on).do(onNext: by).eraseToAnyConsumable()
