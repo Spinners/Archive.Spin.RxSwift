@@ -39,7 +39,7 @@ extension Observable: Producer & Consumable {
         return self.do(onNext: function).eraseToAnyProducer()
     }
 
-    public func engage() -> Runtime {
+    public func spin() -> Runtime {
         return self.subscribe()
     }
 }
