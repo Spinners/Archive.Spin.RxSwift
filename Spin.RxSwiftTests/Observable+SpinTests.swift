@@ -13,6 +13,19 @@ import Spin_RxSwift
 import XCTest
 
 final class Observable_SpinTests: XCTestCase {
+        
+    func testToStream_gives_the_original_observable () {
+        // Given: a from closure
+        let fromClosure = { () -> Observable<Int> in return .just(1) }
+        let fromClosureResult = fromClosure()
+        
+        // When: retrieving the stream from the closure
+        let resultStream = Observable.from(function: fromClosure).toStream()
+        
+        // Then: the stream is of the same type of the result of the from closure
+        XCTAssertTrue(type(of: resultStream) == type(of: fromClosureResult))
+    }
+    
     func testMutipleCompose_transforms_a_stream_elements_in_the_correct_type() {
         // Given: a composed stream
         let composedResult = Observable
