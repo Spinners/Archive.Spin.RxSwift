@@ -12,13 +12,9 @@ import Spin
 extension Observable: Producer & Consumable {
     public typealias Input = Observable
     public typealias Value = Element
-    public typealias Context = SchedulerType
+    public typealias Context = ImmediateSchedulerType
     public typealias Runtime = Disposable
-
-    public static func from(function: () -> Input) -> AnyProducer<Input, Value, Context, Runtime> {
-        return function().eraseToAnyProducer()
-    }
-
+    
     public func compose<Output: Producer>(function: (Input) -> Output) -> AnyProducer<Output.Input, Output.Value, Output.Context, Output.Runtime> {
         return function(self).eraseToAnyProducer()
     }
@@ -27,10 +23,6 @@ extension Observable: Producer & Consumable {
         return self.scan(value, accumulator: reducer).eraseToAnyConsumable()
     }
     
-    public func toStream() -> Input {
-        return self
-    }
-
     public func consume(by: @escaping (Value) -> Void, on: Context) -> AnyConsumable<Value, Context, Runtime> {
         return self.observeOn(on).do(onNext: by).eraseToAnyConsumable()
     }
@@ -42,4 +34,10 @@ extension Observable: Producer & Consumable {
     public func spin() -> Runtime {
         return self.subscribe()
     }
+    
+    public func toReactiveStream() -> Input {
+        return self
+    }
 }
+
+public typealias Spin<Value> = AnyProducer<Observable<Value>, Value, Observable<Value>.Context, Observable<Value>.Runtime>
