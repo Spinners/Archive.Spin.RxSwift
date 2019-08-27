@@ -7,6 +7,7 @@
 //
 
 import RxSwift
+import Spin
 import Spin_RxSwift
 import XCTest
 
@@ -38,6 +39,7 @@ final class Observable_SpinTests: XCTestCase {
         // Given: a composed stream
         // When: executing the loop
         var result = [Int]()
+                
         Spin
             .from { return Observable<Int>.from([1, 2, 3, 4, 5, 6, 7, 8, 9]) }
             .compose { return $0.map { "\($0)" } }

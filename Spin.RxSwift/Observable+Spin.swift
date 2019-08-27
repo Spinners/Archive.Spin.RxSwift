@@ -39,5 +39,3 @@ extension Observable: Producer & Consumable {
         return self
     }
 }
-
-public typealias Spin<Value> = AnyProducer<Observable<Value>, Value, Observable<Value>.Executer, Observable<Value>.Lifecycle>
