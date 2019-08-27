@@ -12,26 +12,26 @@ import Spin
 extension Observable: Producer & Consumable {
     public typealias Input = Observable
     public typealias Value = Element
-    public typealias Context = ImmediateSchedulerType
-    public typealias Runtime = Disposable
+    public typealias Executer = ImmediateSchedulerType
+    public typealias Lifecycle = Disposable
     
-    public func compose<Output: Producer>(function: (Input) -> Output) -> AnyProducer<Output.Input, Output.Value, Output.Context, Output.Runtime> {
+    public func compose<Output: Producer>(function: (Input) -> Output) -> AnyProducer<Output.Input, Output.Value, Output.Executer, Output.Lifecycle> {
         return function(self).eraseToAnyProducer()
     }
 
-    public func scan<Result>(initial value: Result, reducer: @escaping (Result, Value) -> Result) -> AnyConsumable<Result, Context, Runtime> {
+    public func scan<Result>(initial value: Result, reducer: @escaping (Result, Value) -> Result) -> AnyConsumable<Result, Executer, Lifecycle> {
         return self.scan(value, accumulator: reducer).eraseToAnyConsumable()
     }
     
-    public func consume(by: @escaping (Value) -> Void, on: Context) -> AnyConsumable<Value, Context, Runtime> {
+    public func consume(by: @escaping (Value) -> Void, on: Executer) -> AnyConsumable<Value, Executer, Lifecycle> {
         return self.observeOn(on).do(onNext: by).eraseToAnyConsumable()
     }
 
-    public func spy(function: @escaping (Value) -> Void) -> AnyProducer<Input, Value, Context, Runtime> {
+    public func spy(function: @escaping (Value) -> Void) -> AnyProducer<Input, Value, Executer, Lifecycle> {
         return self.do(onNext: function).eraseToAnyProducer()
     }
 
-    public func spin() -> Runtime {
+    public func spin() -> Lifecycle {
         return self.subscribe()
     }
     
@@ -40,4 +40,4 @@ extension Observable: Producer & Consumable {
     }
 }
 
-public typealias Spin<Value> = AnyProducer<Observable<Value>, Value, Observable<Value>.Context, Observable<Value>.Runtime>
+public typealias Spin<Value> = AnyProducer<Observable<Value>, Value, Observable<Value>.Executer, Observable<Value>.Lifecycle>
