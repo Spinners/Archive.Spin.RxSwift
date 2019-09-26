@@ -62,7 +62,7 @@ final class Observable_SpinTests: XCTestCase {
             }
         }
 
-        Spin
+        Spinner
             .from { return commandRelay.asObservable() }
             .feedback(initial: .idle, reducer: reducer)
             .consume(by: { state in print("after feedback, state=\(state)"); expectations.fulfill() }, on: MainScheduler.instance)
