@@ -6,6 +6,7 @@
 //  Copyright © 2019 WarpFactor. All rights reserved.
 //
 
+import RxBlocking
 import RxRelay
 import RxSwift
 import Spin
@@ -17,251 +18,249 @@ struct Pair<Value: Equatable>: Equatable {
     let right: Value
 }
 
-enum MockState {
-    case idle
-    case loading
-    case loaded
-    case fail
+struct MockState: Equatable {
+    let value: Int
+
+    static let zero = MockState(value: 0)
 }
 
-enum MockAction {
-    case startLoad
-    case load
-    case error
+enum MockAction: Equatable {
+    case increment
+    case reset
 }
 
-struct LoadCommand: Command {
+class IncrementCommand: Command {
+    typealias Result = Observable<MockAction>
+    typealias State = MockState
+
+    var operationQueueOfExecutionName: String?
+
+    func execute(basedOn state: MockState) -> Observable<MockAction> {
+
+        self.operationQueueOfExecutionName = OperationQueue.current?.name
+
+        if state.value >= 5 {
+            return .just(.reset)
+        }
+
+        return .just(.increment)
+    }
+}
+
+struct ResetCommand: Command {
     typealias Result = Observable<MockAction>
     typealias State = MockState
 
     func execute(basedOn state: MockState) -> Observable<MockAction> {
-        print("while executing command, current state=\(state)")
-        return .from([.startLoad, .load])
+        return .just(.reset)
+    }
+}
+
+let reducer: (MockState, MockAction) -> MockState = { (state, action) in
+    switch action {
+    case .increment:
+        return MockState(value: state.value + 1)
+    case .reset:
+        return MockState(value: 0)
     }
 }
 
 final class Observable_SpinTests: XCTestCase {
     
     private let disposeBag = DisposeBag()
-    
-    func test() {
 
-        let expectations = expectation(description: "feedback")
-        expectations.expectedFulfillmentCount = 3
+    // MARK: tests Consumable conformance
+    func testConsume_receives_all_the_events_from_the_inputStream() {
+        // Given: some values to emit as a stream
+        let exp = expectation(description: "consume")
+        exp.expectedFulfillmentCount = 9
 
-        let commandRelay = PublishRelay<AnyCommand<Observable<MockAction>, MockState>>()
+        let expectedValues = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+        var consumedValues = [Int]()
 
-        let reducer: (MockState, MockAction) -> MockState = { (state, action) in
-            switch action {
-            case .startLoad:
-                return .loading
-            case .load:
-                return .loaded
-            case .error:
-                return .fail
-            }
-        }
-
-        Spinner
-            .from { return commandRelay.asObservable() }
-            .feedback(initial: .idle, reducer: reducer)
-            .consume(by: { state in print("after feedback, state=\(state)"); expectations.fulfill() }, on: MainScheduler.instance)
+        // When: consuming a stream of input values
+        Observable<Int>.from(expectedValues)
+            .consume(by: { value in
+                consumedValues.append(value)
+                exp.fulfill()
+            }, on: MainScheduler.instance)
             .spin()
             .disposed(by: self.disposeBag)
 
-        commandRelay.accept(LoadCommand().eraseToAnyCommand())
+        waitForExpectations(timeout: 2)
 
-        waitForExpectations(timeout: 5)
-
+        // Then: consumes values are the same os the input values
+        XCTAssertEqual(consumedValues, expectedValues)
     }
-    
-    //
-    //    func testToStream_gives_the_original_reactiveStream () {
-    //        // Given: a from closure
-    //        let fromClosure = { () -> Observable<MockCommand> in return .just(MockCommand()) }
-    //        let fromClosureResult = fromClosure()
-    //
-    //        // When: retrieving the stream from the closure
-    //        let resultStream = Spin.from(function: fromClosure).toReactiveStream()
-    //
-    //        // Then: the stream is of the same type than the result of the from closure
-    //        XCTAssertTrue(type(of: resultStream) == type(of: fromClosureResult))
-    //    }
-    //
-    //    func testMutipleCompose_transforms_a_stream_elements_in_the_correct_type() {
-    //        let expectations = expectation(description: "consume by")
-    //        expectations.expectedFulfillmentCount = 9
-    //
-    //        // Given: a composed stream
-    //        // When: executing the loop
-    //        var result = [Int]()
-    //
-    //        Spin
-    //            .from { return Observable<Int>.from([1, 2, 3, 4, 5, 6, 7, 8, 9]) }
-    //            .compose { return $0.map { "\($0)" } }
-    //            .compose { return $0.map { Int($0)! } }
-    //            .scan(initial: 0) { (previous, current) -> Int in
-    //                expectations.fulfill()
-    //                result.append(current)
-    //                return previous + current
-    //            }
-    //            .spin()
-    //            .disposed(by: self.disposeBag)
-    //
-    //        // Then: the output values before the scan are the ones from the final transformation of compose
-    //        waitForExpectations(timeout: 2)
-    //        XCTAssertEqual([1, 2, 3, 4, 5, 6, 7, 8, 9], result)
-    //    }
-    //
-    //    func testScan_outputs_the_right_results () {
-    //        // Given: an input stream being a sequence of ints from 1 to 9
-    //        let expectations = expectation(description: "consume by")
-    //        expectations.expectedFulfillmentCount = 9
-    //        let expectedResult = [1, 3, 6, 10, 15, 21, 28, 36, 45]
-    //        var result = [Int]()
-    //
-    //        // When: scanning the input by making the sum of all the inputs elements
-    //        Spin.from { return Observable<Int>.from([1, 2, 3, 4, 5, 6, 7, 8, 9]) }
-    //            .scan(initial: 0) { return $0 + $1 }
-    //            .consume(by: { value in
-    //                expectations.fulfill()
-    //                result.append(value)
-    //            }, on: MainScheduler.instance)
-    //            .spin()
-    //            .disposed(by: self.disposeBag)
-    //
-    //        // Then: the expectation is met with the output being a stream of the successive addition of the input elements
-    //        waitForExpectations(timeout: 2)
-    //        XCTAssertEqual(result, expectedResult)
-    //    }
-    //
-    //    func testSpy_spies_the_elements_of_the_stream () {
-    //        // Given: an input stream being a sequence of ints from 1 to 9
-    //        let expectations = expectation(description: "spy")
-    //        expectations.expectedFulfillmentCount = 9
-    //        let expectedResult = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-    //        var result = [Int]()
-    //
-    //        // When: spying the elements of the stream
-    //        Spin.from { return Observable<Int>.from([1, 2, 3, 4, 5, 6, 7, 8, 9]) }
-    //            .spy(function: { (value) in
-    //                expectations.fulfill()
-    //                result.append(value)
-    //            })
-    //            .scan(initial: 0) { return $0 + $1 }
-    //            .spin()
-    //            .disposed(by: self.disposeBag)
-    //
-    //        // Then: the spied elements are the same as the inputs elements
-    //        waitForExpectations(timeout: 2)
-    //        XCTAssertEqual(result, expectedResult)
-    //    }
-    //
-    //    func testMiddlewares_catch_the_elements_of_scan () {
-    //        // Given: an input stream being a sequence of ints from 1 to 9
-    //        let expectations = expectation(description: "middlewares")
-    //        expectations.expectedFulfillmentCount = 27
-    //        let expectedResult = [Pair(left: 0, right: 1),
-    //                              Pair(left: 1, right: 2),
-    //                              Pair(left: 3, right: 3),
-    //                              Pair(left: 6, right: 4),
-    //                              Pair(left: 10, right: 5),
-    //                              Pair(left: 15, right: 6),
-    //                              Pair(left: 21, right: 7),
-    //                              Pair(left: 28, right: 8),
-    //                              Pair(left: 36, right: 9)]
-    //        var result = [Pair<Int>]()
-    //
-    //        // When: spying the elements of the stream
-    //        Spin.from { return Observable<Int>.from([1, 2, 3, 4, 5, 6, 7, 8, 9]) }
-    //            .scan(initial: 0, reducer: { $0 + $1 }, middlewares: { (previous, current) in
-    //                expectations.fulfill()
-    //                result.append(Pair(left: previous, right: current))
-    //            }, { (previous, current) in
-    //                expectations.fulfill()
-    //            }, { (previous, current) in
-    //                expectations.fulfill()
-    //            })
-    //            .spin()
-    //            .disposed(by: self.disposeBag)
-    //
-    //        // Then: the spied elements are the same as the inputs elements
-    //        waitForExpectations(timeout: 2)
-    //        XCTAssertEqual(result, expectedResult)
-    //    }
-    //
-    //    func testSchedulers_execute_layers_on_good_queues () {
-    //        let expectations = expectation(description: "schedulers")
-    //        expectations.expectedFulfillmentCount = 7
-    //
-    //        let fromScheduler: OperationQueueScheduler = {
-    //            let queue = OperationQueue()
-    //            queue.name = "FROM_QUEUE"
-    //            queue.maxConcurrentOperationCount = 1
-    //            return OperationQueueScheduler(operationQueue: queue)
-    //        }()
-    //
-    //        let composeScheduler: OperationQueueScheduler = {
-    //            let queue = OperationQueue()
-    //            queue.name = "COMPOSE_QUEUE"
-    //            queue.maxConcurrentOperationCount = 1
-    //            return OperationQueueScheduler(operationQueue: queue)
-    //        }()
-    //
-    //        let consumeScheduler1: OperationQueueScheduler = {
-    //            let queue = OperationQueue()
-    //            queue.name = "CONSUME_QUEUE_1"
-    //            queue.maxConcurrentOperationCount = 1
-    //            return OperationQueueScheduler(operationQueue: queue)
-    //        }()
-    //
-    //        let consumeScheduler2: OperationQueueScheduler = {
-    //            let queue = OperationQueue()
-    //            queue.name = "CONSUME_QUEUE_2"
-    //            queue.maxConcurrentOperationCount = 1
-    //            return OperationQueueScheduler(operationQueue: queue)
-    //        }()
-    //
-    //        // Given: an input stream being a a single element
-    //        // When: executing the different layers off the loop on different Queues
-    //        // Then: the queues are respected
-    //        Spin
-    //            .from { () -> Observable<Int> in
-    //                expectations.fulfill()
-    //                return Observable<Int>.just(1).observeOn(fromScheduler)
-    //            }
-    //            // switch to FROM_QUEUE after from
-    //            .spy { _ in
-    //                expectations.fulfill()
-    //                XCTAssertEqual(OperationQueue.current?.name!, "FROM_QUEUE")
-    //            }
-    //            .compose { input -> Observable<String> in
-    //                expectations.fulfill()
-    //                return input.map { "\($0)" }.observeOn(composeScheduler)
-    //            }
-    //            // switch to COMPOSE_QUEUE after compose
-    //            .spy { _ in
-    //                expectations.fulfill()
-    //                XCTAssertEqual(OperationQueue.current?.name!, "COMPOSE_QUEUE")
-    //            }
-    //            .scan(initial: "") { (previous, current) -> String in
-    //                expectations.fulfill()
-    //                return previous + current
-    //            }
-    //            // switch to CONSUME_QUEUE_1 before consume
-    //            .consume(by: { _ in
-    //                expectations.fulfill()
-    //                XCTAssertEqual(OperationQueue.current?.name!, "CONSUME_QUEUE_1")
-    //            }, on: consumeScheduler1)
-    //            // switch to CONSUME_QUEUE_2 before consume
-    //            .consume(by: { _ in
-    //                expectations.fulfill()
-    //                XCTAssertEqual(OperationQueue.current?.name!, "CONSUME_QUEUE_2")
-    //            }, on: consumeScheduler2)
-    //            .spin()
-    //            .disposed(by: self.disposeBag)
-    //
-    //        waitForExpectations(timeout: 2)
-    //
-    //    }
+
+    func testConsume_switches_to_the_expected_queues () {
+        let expectations = expectation(description: "schedulers")
+        expectations.expectedFulfillmentCount = 18
+
+        let consumeScheduler1: OperationQueueScheduler = {
+            let queue = OperationQueue()
+            queue.name = "CONSUME_QUEUE_1"
+            queue.maxConcurrentOperationCount = 1
+            return OperationQueueScheduler(operationQueue: queue)
+        }()
+
+        let consumeScheduler2: OperationQueueScheduler = {
+            let queue = OperationQueue()
+            queue.name = "CONSUME_QUEUE_2"
+            queue.maxConcurrentOperationCount = 1
+            return OperationQueueScheduler(operationQueue: queue)
+        }()
+
+        // Given: some values to emit as a stream
+        // When: consuming these values on different Executers
+        // Then: the Executers are respected
+        Observable<Int>.from([1, 2, 3, 4, 5, 6, 7, 8, 9])
+            // switch to CONSUME_QUEUE_1 before consume
+            .consume(by: { _ in
+                expectations.fulfill()
+                XCTAssertEqual(OperationQueue.current?.name!, "CONSUME_QUEUE_1")
+            }, on: consumeScheduler1)
+            // switch to CONSUME_QUEUE_2 before consume
+            .consume(by: { _ in
+                expectations.fulfill()
+                XCTAssertEqual(OperationQueue.current?.name!, "CONSUME_QUEUE_2")
+            }, on: consumeScheduler2)
+            .spin()
+            .disposed(by: self.disposeBag)
+
+        waitForExpectations(timeout: 2)
+    }
+
+    // MARK: tests Producer conformance
+    func testToReactiveStream_gives_the_original_inputStream () {
+        // Given: a from closure
+        let fromClosure = { () -> Observable<AnyCommand<Observable<MockAction>, MockState>> in return .just(ResetCommand().eraseToAnyCommand()) }
+        let fromClosureResult = fromClosure()
+
+        // When: retrieving the stream from the closure
+        let resultStream = Spinner.from(function: fromClosure).toReactiveStream()
+
+        // Then: the stream is of the same type than the result of the from closure
+        XCTAssertTrue(type(of: resultStream) == type(of: fromClosureResult))
+    }
+
+    func testSpy_sees_all_the_events_from_the_inputStream() {
+        // Given: some commands to emit as a stream
+        let inputStream = Observable<AnyCommand<Observable<MockAction>, MockState>>.from([
+            IncrementCommand().eraseToAnyCommand(),
+            ResetCommand().eraseToAnyCommand()
+            ])
+
+        var spiedCommands: [AnyCommand<Observable<MockAction>, MockState>] = []
+
+        // When: spying the stream of commands
+        _ = try? Spinner
+            .from { inputStream }
+            .spy { spiedCommands.append($0) }
+            .toReactiveStream()
+            .toBlocking()
+            .toArray()
+
+        // Then: consumes values are the same os the input values
+        XCTAssertEqual(spiedCommands.count, 2)
+        let action1 = try? spiedCommands[0].execute(basedOn: MockState(value: 0)).toBlocking().single()
+        let action2 = try? spiedCommands[1].execute(basedOn: MockState(value: 0)).toBlocking().single()
+        
+        XCTAssertEqual(action1!, .increment)
+        XCTAssertEqual(action2!, .reset)
+    }
+
+    func testFeedback_computes_the_expected_states() {
+        let exp = expectation(description: "feedback")
+        exp.expectedFulfillmentCount = 7
+        var receivedStates = [MockState]()
+
+        // Given: some commands to emit as a stream
+        let inputStream = Observable<AnyCommand<Observable<MockAction>, MockState>>.from([
+            IncrementCommand().eraseToAnyCommand(),
+            IncrementCommand().eraseToAnyCommand(),
+            IncrementCommand().eraseToAnyCommand(),
+            IncrementCommand().eraseToAnyCommand(),
+            IncrementCommand().eraseToAnyCommand(),
+            IncrementCommand().eraseToAnyCommand()
+            ])
+
+        // When: runing a feedback loop on the stream of commands
+        Spinner
+            .from { inputStream }
+            .feedback(initial: .zero, reducer: reducer)
+            .consume(by: { state in
+                exp.fulfill()
+                receivedStates.append(state)
+            }, on: MainScheduler.instance)
+            .spin()
+            .disposed(by: self.disposeBag)
+
+        waitForExpectations(timeout: 2)
+
+        // Then: the computed states are good (and relying on the previous state values -> see the implementation of IncrementCommand)
+        XCTAssertEqual(receivedStates.map { $0.value }, [0, 1, 2, 3, 4, 5, 0])
+    }
+
+    func testExecuters_are_correctly_applied () {
+        let expectations = expectation(description: "schedulers")
+        expectations.expectedFulfillmentCount = 6
+
+        let fromScheduler: OperationQueueScheduler = {
+            let queue = OperationQueue()
+            queue.name = "FROM_QUEUE"
+            queue.maxConcurrentOperationCount = 1
+            return OperationQueueScheduler(operationQueue: queue)
+        }()
+
+        let consumeScheduler1: OperationQueueScheduler = {
+            let queue = OperationQueue()
+            queue.name = "CONSUME_QUEUE_1"
+            queue.maxConcurrentOperationCount = 1
+            return OperationQueueScheduler(operationQueue: queue)
+        }()
+
+        let consumeScheduler2: OperationQueueScheduler = {
+            let queue = OperationQueue()
+            queue.name = "CONSUME_QUEUE_2"
+            queue.maxConcurrentOperationCount = 1
+            return OperationQueueScheduler(operationQueue: queue)
+        }()
+
+        // Given: an input stream being a single Command
+        // When: executing the different layers of the loop on different Executers
+        // Then: the Executers are respected
+        let commandToExecute = IncrementCommand()
+        let inputStream = Observable<AnyCommand<Observable<MockAction>, MockState>>.from([
+            commandToExecute.eraseToAnyCommand()
+            ])
+
+        Spinner
+            .from { () -> Observable<AnyCommand<Observable<MockAction>, MockState>> in
+                expectations.fulfill()
+                return inputStream.observeOn(fromScheduler)
+            }
+            // switch to FROM_QUEUE after from
+            .spy(function: { _ in
+                expectations.fulfill()
+                XCTAssertEqual(OperationQueue.current?.name!, "FROM_QUEUE")
+            })
+            .feedback(initial: .zero, reducer: reducer)
+            // switch to CONSUME_QUEUE_1 before consume
+            .consume(by: { _ in
+                expectations.fulfill()
+                XCTAssertEqual(OperationQueue.current?.name!, "CONSUME_QUEUE_1")
+            }, on: consumeScheduler1)
+            // switch to CONSUME_QUEUE_2 before consume
+            .consume(by: { _ in
+                expectations.fulfill()
+                XCTAssertEqual(OperationQueue.current?.name!, "CONSUME_QUEUE_2")
+            }, on: consumeScheduler2)
+            .spin()
+            .disposed(by: self.disposeBag)
+
+        waitForExpectations(timeout: 2)
+
+        XCTAssertEqual(commandToExecute.operationQueueOfExecutionName!, "FROM_QUEUE")
+    }
 }

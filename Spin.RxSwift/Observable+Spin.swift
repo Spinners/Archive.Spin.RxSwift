@@ -40,7 +40,7 @@ extension Observable: Producer where Element: Command, Element.Stream: Observabl
         }
         .scan(value, accumulator: reducer)
         .startWith(value)
-        .consume(by: { currentState.accept($0) }, on: CurrentThreadScheduler.instance)
+        .do(onNext: { currentState.accept($0) })
         .eraseToAnyConsumable()
     }
     
