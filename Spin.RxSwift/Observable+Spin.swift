@@ -33,8 +33,7 @@ extension Observable: Producer where Element: Command, Element.Stream: Observabl
         return self
             .withLatestFrom(currentState) { return ($0, $1) }
             .flatMap { args -> Observable<Value.Stream.Value> in
-                let command = args.0
-                let state = args.1
+                let (command, state) = args
 
                 return command.execute(basedOn: state).asObservable()
         }
