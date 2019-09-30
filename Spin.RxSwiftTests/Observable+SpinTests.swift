@@ -13,11 +13,6 @@ import Spin
 import Spin_RxSwift
 import XCTest
 
-struct Pair<Value: Equatable>: Equatable {
-    let left: Value
-    let right: Value
-}
-
 struct MockState: Equatable {
     let value: Int
 
@@ -30,12 +25,15 @@ enum MockAction: Equatable {
 }
 
 class IncrementCommand: Command {
-    typealias Result = Observable<MockAction>
-    typealias State = MockState
-
     var operationQueueOfExecutionName: String?
+    private let shouldError: Bool
+
+    init(shouldError: Bool = false) {
+        self.shouldError = shouldError
+    }
 
     func execute(basedOn state: MockState) -> Observable<MockAction> {
+        guard !self.shouldError else { return .error(TestError()) }
 
         self.operationQueueOfExecutionName = OperationQueue.current?.name
 
@@ -48,12 +46,12 @@ class IncrementCommand: Command {
 }
 
 struct ResetCommand: Command {
-    typealias Result = Observable<MockAction>
-    typealias State = MockState
-
     func execute(basedOn state: MockState) -> Observable<MockAction> {
         return .just(.reset)
     }
+}
+
+struct TestError: Error {
 }
 
 let reducer: (MockState, MockAction) -> MockState = { (state, action) in
@@ -70,6 +68,7 @@ final class Observable_SpinTests: XCTestCase {
     private let disposeBag = DisposeBag()
 
     // MARK: tests Consumable conformance
+
     func testConsume_receives_all_the_events_from_the_inputStream() {
         // Given: some values to emit as a stream
         let exp = expectation(description: "consume")
@@ -132,6 +131,7 @@ final class Observable_SpinTests: XCTestCase {
     }
 
     // MARK: tests Producer conformance
+
     func testToReactiveStream_gives_the_original_inputStream () {
         // Given: a from closure
         let fromClosure = { () -> Observable<AnyCommand<Observable<MockAction>, MockState>> in return .just(ResetCommand().eraseToAnyCommand()) }
@@ -200,6 +200,34 @@ final class Observable_SpinTests: XCTestCase {
 
         // Then: the computed states are good (and relying on the previous state values -> see the implementation of IncrementCommand)
         XCTAssertEqual(receivedStates.map { $0.value }, [0, 1, 2, 3, 4, 5, 0])
+    }
+
+    func testLoop_does_not_stop_in_case_of_error_in_a_command() {
+        let exp = expectation(description: "feedback")
+        exp.expectedFulfillmentCount = 2
+        var receivedStates = [MockState]()
+
+        // Given: some commands to emit as a stream
+        let inputStream = Observable<AnyCommand<Observable<MockAction>, MockState>>.from([
+            IncrementCommand(shouldError: true).eraseToAnyCommand(),
+            IncrementCommand(shouldError: false).eraseToAnyCommand()
+            ])
+
+        // When: runing a feedback loop on the stream of commands
+        Spinner
+            .from { inputStream }
+            .feedback(initial: .zero, reducer: reducer)
+            .consume(by: { state in
+                exp.fulfill()
+                receivedStates.append(state)
+            }, on: MainScheduler.instance)
+            .spin()
+            .disposed(by: self.disposeBag)
+
+        waitForExpectations(timeout: 2)
+
+        // Then: the computed states are good (the command that failed did not stop the loop)
+        XCTAssertEqual(receivedStates.map { $0.value }, [0, 1])
     }
 
     func testExecuters_are_correctly_applied () {
