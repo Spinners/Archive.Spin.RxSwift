@@ -46,13 +46,13 @@ extension Observable: Producer where Element: Command, Element.Stream: Observabl
         .do(onNext: { currentState.accept($0) })
         .eraseToAnyConsumable()
     }
-    
-    public func spy(function: @escaping (Value) -> Void) -> AnyProducer<Input, Value, Executer, Lifecycle> {
-        return self
-            .do(onNext: function)
-            .eraseToAnyProducer()
-    }
-    
+
+//    public func spy(function: @escaping (Value) -> Void) -> AnyProducer<Input, Value, Executer, Lifecycle> {
+//        return self
+//            .do(onNext: function)
+//            .eraseToAnyProducer()
+//    }
+
     public func toReactiveStream() -> Input {
         return self
     }
