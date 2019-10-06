@@ -20,6 +20,9 @@
 		74243EEC2307B013001A05B3 /* Observable+SpinTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74243EEB2307B013001A05B3 /* Observable+SpinTests.swift */; };
 		74243EEE2307B013001A05B3 /* Spin_RxSwift.h in Headers */ = {isa = PBXBuildFile; fileRef = 74243EE02307B013001A05B3 /* Spin_RxSwift.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		74243EFF2307B166001A05B3 /* Observable+Spin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74243EFE2307B166001A05B3 /* Observable+Spin.swift */; };
+		74B32981234A6C7A00A4EED4 /* Spin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74243EF92307B0DE001A05B3 /* Spin.framework */; };
+		74B32982234A6C7A00A4EED4 /* Spin.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 74243EF92307B0DE001A05B3 /* Spin.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		74B32983234A6CC800A4EED4 /* Spin.framework in 📦 Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 74243EF92307B0DE001A05B3 /* Spin.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,6 +42,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				74B32983234A6CC800A4EED4 /* Spin.framework in 📦 Copy Frameworks */,
 				7411076D233AFC6800EBB8E9 /* RxRelay.framework in 📦 Copy Frameworks */,
 				1AC3BB57230B89770019880E /* RxBlocking.framework in 📦 Copy Frameworks */,
 				1AC3BB4C230B82620019880E /* RxSwift.framework in 📦 Copy Frameworks */,
@@ -54,6 +58,7 @@
 			files = (
 				740D3E852346D47E00C2115C /* RxSwift.framework in Embed Frameworks */,
 				740D3E832346D47E00C2115C /* RxRelay.framework in Embed Frameworks */,
+				74B32982234A6C7A00A4EED4 /* Spin.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -63,8 +68,6 @@
 /* Begin PBXFileReference section */
 		1A2DB1B8232FC484002FF5E0 /* RxRelay.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxRelay.framework; path = Carthage/Build/iOS/RxRelay.framework; sourceTree = "<group>"; };
 		1AC3BB55230B896E0019880E /* RxBlocking.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxBlocking.framework; path = Carthage/Build/iOS/RxBlocking.framework; sourceTree = "<group>"; };
-		740D3E2A23458B2800C2115C /* Spin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Spin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		740D3E4C23465B8500C2115C /* Spin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Spin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		74243EDD2307B013001A05B3 /* Spin_RxSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Spin_RxSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		74243EE02307B013001A05B3 /* Spin_RxSwift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Spin_RxSwift.h; sourceTree = "<group>"; };
 		74243EE12307B013001A05B3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -82,6 +85,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				740D3E842346D47E00C2115C /* RxSwift.framework in Frameworks */,
+				74B32981234A6C7A00A4EED4 /* Spin.framework in Frameworks */,
 				740D3E822346D47E00C2115C /* RxRelay.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -140,8 +144,6 @@
 		74243EF72307B0DD001A05B3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				740D3E4C23465B8500C2115C /* Spin.framework */,
-				740D3E2A23458B2800C2115C /* Spin.framework */,
 				1A2DB1B8232FC484002FF5E0 /* RxRelay.framework */,
 				1AC3BB55230B896E0019880E /* RxBlocking.framework */,
 				74243EF82307B0DE001A05B3 /* RxSwift.framework */,
