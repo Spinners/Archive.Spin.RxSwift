@@ -30,7 +30,7 @@ extension Observable: Consumable {
 extension Observable: Producer where Element: Command, Element.Stream: ObservableType, Element.Stream.Element == Element.Stream.Value {
     public typealias Input = Observable
 
-    public func feedback(initial value: Value.State, reducer: @escaping (Value.State, Value.Stream.Value) -> Value.State) -> AnyConsumable<Value.State, Executer, Lifecycle> {
+    public func executeAndScan(initial value: Value.State, reducer: @escaping (Value.State, Value.Stream.Value) -> Value.State) -> AnyConsumable<Value.State, Executer, Lifecycle> {
         let currentState = BehaviorRelay<Value.State>(value: value)
         
         return self

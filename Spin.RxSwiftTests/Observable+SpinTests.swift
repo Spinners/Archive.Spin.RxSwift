@@ -188,7 +188,7 @@ final class Observable_SpinTests: XCTestCase {
         // When: runing a feedback loop on the stream of commands
         Spinner
             .from { inputStream }
-            .feedback(initial: .zero, reducer: reducer)
+            .executeAndScan(initial: .zero, reducer: reducer)
             .consume(by: { state in
                 exp.fulfill()
                 receivedStates.append(state)
@@ -216,7 +216,7 @@ final class Observable_SpinTests: XCTestCase {
         // When: runing a feedback loop on the stream of commands
         Spinner
             .from { inputStream }
-            .feedback(initial: .zero, reducer: reducer)
+            .executeAndScan(initial: .zero, reducer: reducer)
             .consume(by: { state in
                 exp.fulfill()
                 receivedStates.append(state)
@@ -274,7 +274,7 @@ final class Observable_SpinTests: XCTestCase {
 //                expectations.fulfill()
 //                XCTAssertEqual(OperationQueue.current?.name!, "FROM_QUEUE")
 //            })
-            .feedback(initial: .zero, reducer: reducer)
+            .executeAndScan(initial: .zero, reducer: reducer)
             // switch to CONSUME_QUEUE_1 before consume
             .consume(by: { _ in
                 expectations.fulfill()
