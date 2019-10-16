@@ -281,7 +281,7 @@ final class Observable_SpinTests: XCTestCase {
                 XCTAssertEqual(OperationQueue.current?.name!, "CONSUME_QUEUE_1")
             }, on: consumeScheduler1)
             // switch to CONSUME_QUEUE_2 before consume
-            .consume(by: { _ in
+            .consume(by: { state in
                 expectations.fulfill()
                 XCTAssertEqual(OperationQueue.current?.name!, "CONSUME_QUEUE_2")
             }, on: consumeScheduler2)
